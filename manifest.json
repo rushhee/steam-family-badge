@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Steam Family Share Badge",
-  "version": "1.0.0",
-  "description": "Marks Steam store search results that are available through your Steam Family library.",
+  "version": "1.0.1",
+  "description": "Marks Steam store search results and game tiles that are available through your Steam Family library.",
   "permissions": ["storage"],
   "host_permissions": [
     "https://store.steampowered.com/*",
@@ -13,7 +13,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://store.steampowered.com/search*"],
+      "matches": ["https://store.steampowered.com/*"],
       "js": ["content.js"],
       "css": ["content.css"],
       "run_at": "document_idle"

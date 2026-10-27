@@ -1,4 +1,5 @@
-// Adds a "Family Share" badge to search result rows whose app is in the family library.
+// Adds an "In Steam Family Library" badge to store search rows and game tiles whose app
+// is in the family library.
 
 const BADGE_CLASS = 'sfs-badge';
 // Two adults with a child in front, matching the store page's family library banner.
@@ -26,24 +27,61 @@ async function loadSharedApps(force = false) {
   return res.data ? new Set(res.data.appids) : null;
 }
 
-function badgeRow(row) {
-  if (row.querySelector(`.${BADGE_CLASS}`)) return;
-  // Bundles list several appids; only badge single-app rows.
-  const appid = Number(row.dataset.dsAppid);
-  if (!appid || !sharedAppids.has(appid)) return;
+// Older store markup carries data-ds-appid; newer React tiles only have the /app/<id> link.
+// Bundles list several appids in data-ds-appid, which parses to NaN and is skipped.
+function appidOf(link) {
+  if (link.dataset.dsAppid) return Number(link.dataset.dsAppid);
+  const match = link.pathname.match(/^\/app\/(\d+)/);
+  return match ? Number(match[1]) : null;
+}
 
+function makeBadge(extraClass) {
   const badge = document.createElement('span');
-  badge.className = BADGE_CLASS;
+  badge.className = extraClass ? `${BADGE_CLASS} ${extraClass}` : BADGE_CLASS;
   badge.innerHTML = FAMILY_ICON;
   badge.append('In Steam Family Library');
+  return badge;
+}
+
+function badgeRow(row) {
+  if (row.querySelector(`.${BADGE_CLASS}`)) return;
+  if (!sharedAppids.has(appidOf(row))) return;
+
+  const badge = makeBadge();
   const name = row.querySelector('.search_name');
   if (name) name.after(badge);
   else row.append(badge);
 }
 
-function badgeAll(root = document) {
+// Capsule tiles (home page carousels, sale capsules, tab lists, etc.) get the badge
+// overlaid on the top-left corner of the tile.
+function badgeTile(link) {
+  if (link.querySelector(`.${BADGE_CLASS}`)) return;
+  if (!link.querySelector('img')) return;
+  // Full-page background ads behind the home page link to an app but aren't tiles.
+  if (link.matches('.home_page_takeover_sizer, .home_page_takeunder')) return;
+  if (!sharedAppids.has(appidOf(link))) return;
+
+  if (getComputedStyle(link).position === 'static') link.style.position = 'relative';
+  link.append(makeBadge('sfs-tile-badge'));
+}
+
+function badgeAll() {
   if (!sharedAppids) return;
-  root.querySelectorAll('a.search_result_row[data-ds-appid]').forEach(badgeRow);
+  document.querySelectorAll('a.search_result_row[data-ds-appid]').forEach(badgeRow);
+  document
+    .querySelectorAll('a[data-ds-appid]:not(.search_result_row), a[href*="/app/"]:not(.search_result_row)')
+    .forEach(badgeTile);
+}
+
+let scanQueued = false;
+function queueScan() {
+  if (scanQueued) return;
+  scanQueued = true;
+  setTimeout(() => {
+    scanQueued = false;
+    badgeAll();
+  }, 200);
 }
 
 async function init(force = false) {
@@ -52,8 +90,8 @@ async function init(force = false) {
   badgeAll();
 }
 
-// Results load in as you scroll and are replaced when filters change.
-new MutationObserver(() => badgeAll()).observe(document.body, { childList: true, subtree: true });
+// Search results and home page sections load in as you scroll and re-render on changes.
+new MutationObserver(queueScan).observe(document.body, { childList: true, subtree: true });
 
 chrome.runtime.onMessage.addListener((msg) => {
   if (msg.type === 'refresh') init(true);

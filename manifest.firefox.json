@@ -1,0 +1,33 @@
+{
+  "manifest_version": 3,
+  "name": "Steam Family Share Badge",
+  "version": "1.0.1",
+  "description": "Marks Steam store search results and game tiles that are available through your Steam Family library.",
+  "permissions": ["storage"],
+  "host_permissions": [
+    "https://store.steampowered.com/*",
+    "https://api.steampowered.com/*"
+  ],
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://store.steampowered.com/*"],
+      "js": ["content.js"],
+      "css": ["content.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_title": "Steam Family Share Badge",
+    "default_popup": "popup.html"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "paziin@paziin.com",
+      "strict_min_version": "128.0",
+      "data_collection_permissions": { "required": ["none"] }
+    }
+  }
+}

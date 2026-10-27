@@ -6,6 +6,24 @@ A Chrome extension that marks Steam store search results and game tiles (home pa
 - Skips games you own yourself (Steam already shows those as "In Library").
 - Caches the shared library for 6 hours. Click the extension icon to refresh it sooner.
 
+## Screenshots
+
+**Search results**
+
+![Badges on Steam search results](docs/images/search.png)
+
+**Home page featured carousel**
+
+![Badge on the featured carousel](docs/images/home-featured.png)
+
+**Special offers and lists**
+
+![Badges on special offer tiles](docs/images/home-offers.png)
+
+![Badges on New & Trending list rows](docs/images/home-list.png)
+
+<sub>Screenshots use sample family library data.</sub>
+
 ## Install
 
 1. Download the zip for your OS from [Releases](../../releases/latest) and unzip it.

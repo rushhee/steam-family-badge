@@ -1,10 +1,10 @@
 # Steam Family Share Badge
 
-A Chrome and Firefox extension that marks Steam store search results and game tiles (home page carousels, sales, lists) with an **In Steam Family Library** badge when the game is available to you through your Steam Family, so you don't have to open each listing to find out.
+A Chrome and Firefox extension (also available as a userscript) that marks Steam store search results and game tiles (home page carousels, sales, lists) with an **In Steam Family Library** badge when the game is available to you through your Steam Family, so you don't have to open each listing to find out.
 
 - Uses your existing Steam login in the browser; no API key or setup.
 - Skips games you own yourself (Steam already shows those as "In Library").
-- Caches the shared library for 6 hours. Click the extension icon to refresh it sooner.
+- Caches the shared library for 6 hours. Click the extension icon (or use the userscript manager's menu) to refresh it sooner.
 
 ## Screenshots
 

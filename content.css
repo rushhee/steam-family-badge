@@ -1,0 +1,25 @@
+.sfs-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  align-self: flex-start;
+  width: fit-content;
+  margin-top: 3px;
+  padding: 1px 7px 1px 5px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #4c71e0 0%, #2b3dbd 100%);
+  color: #e8edff;
+  font-family: "Motiva Sans", Arial, sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 16px;
+  white-space: nowrap;
+}
+
+.sfs-badge svg {
+  width: 12px;
+  height: 12px;
+  fill: currentColor;
+  flex: none;
+}
